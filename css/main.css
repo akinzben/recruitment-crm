@@ -1,0 +1,328 @@
+:root {
+    --blue: #1e90ff;
+    --white: #ffffff;
+    --cyan: cyan;
+}
+
+@import url("../fonts/noir-pro/styles.css");
+body, html {
+font-family: "NoirPro",sans-serif;
+margin: 0;
+padding: 0;
+height: 100%;
+}
+
+body{
+background: #e9e9e9;
+}
+
+        .task-groups-container{
+
+    width: 100%;
+
+    background: #ffffff;
+
+    padding: 20px;
+
+    display: flex;
+
+    height: 100%;
+
+    flex-direction: row;
+
+}
+
+.task-group{
+    background: none;
+    border: none;
+}
+
+.task-group-box{
+
+    width: 200px;
+
+    min-height:600px;
+
+    margin: 0px 20px;
+
+    list-style: none;
+
+    padding: 10px;
+    border: none;
+
+    height: 100%;
+
+    overflow-y: auto;
+
+}
+
+.task-group-box h4{
+
+    opacity: 1;
+
+    text-align: center;
+
+}
+
+.pending-task-box{
+
+    background: rgba(255, 166, 0, 0.315);
+
+    border-top:4px solid orange;
+
+}
+
+.interview-task-box{
+
+    background: rgba(4, 80, 194, 0.418);
+
+    border-top:4px solid  rgb(4, 80, 194);
+
+}
+
+.test-task-box{
+
+    background: rgba(194, 4, 194, 0.342);
+
+    border-top:4px solid  rgb(194, 4, 194);
+
+}
+
+.hired-task-box{
+
+    background: rgba(4, 194, 20, 0.342);
+
+    border-top:4px solid  rgb(4, 194, 20);
+
+}
+
+ 
+
+.candidate-box{
+
+    width: 100%;
+
+    background: #fff;
+
+    border-radius: 10px;
+
+    min-height: 100px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    margin: 20px 0;
+
+}
+
+ 
+
+.hidden{
+
+    display: none;
+
+}
+
+.fade-1{
+
+    opacity:0.1;
+
+}
+
+ 
+
+.dragging{
+
+    opacity: 0.3;
+
+    cursor: pointer !important;
+
+}
+
+.ui-state-highlight{
+
+    min-height: 50px;
+
+    background: rgba(255, 238, 0, 0.342);
+
+    border-radius: 10px;
+
+    min-width: 70px;
+
+}
+
+input{
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    border:none;
+}
+
+.new-task-group-modal{
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    background: #2c2c2c;
+    color: #fff;
+}
+.new-task-group-modal-content{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: row;
+}
+.new-task-group-modal .close{
+    background: #d20b0b;
+    padding: 10px;
+    font-size: 25px;
+    font-weight: 600;
+}
+.new-task-group-modal-content div{
+    margin-right: 10px;
+}
+
+.new-task-group-colors {
+    display: inline;
+}
+
+.new-task-group-colors input {
+    display: none;
+}
+.new-task-group-colors label {
+    cursor: pointer;
+}
+.new-task-group-colors input:checked + label {
+    border: 2px solid #000;
+}
+
+.btn-check{
+    background: linear-gradient(358deg, rgb(65 66 67), var(--cyan));
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+    padding: 5px 15px;
+}
+
+
+.color-option {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative; /* Required for absolute positioning of checkmark */
+}
+
+.color-option:hover {
+    border-color: black;
+}
+
+/* Define the checkmark icon */
+.color-option .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* Initially hide the checkmark */
+}
+
+/* Show the checkmark when radio button is checked */
+.new-task-group-colors input[type="radio"]:checked + .checkmark {
+    display: block;
+}
+
+.task-group {
+    border-top: 5px solid transparent;
+}
+
+/* Define styles for each color class */
+.task-group-box.red {
+    border-top-color: #cc0000; /* Deep color */
+    background-color: #ffcccc; /* Light color */
+}
+
+.task-group-box.blue {
+    border-top-color: #0000cc; /* Deep color */
+    background-color: #cce6ff; /* Light color */
+}
+
+.task-group-box.green {
+    border-top-color: #006600; /* Deep color */
+    background-color: #ccffcc; /* Light color */
+}
+
+.task-group-box.yellow {
+    border-top-color: #cccc00; /* Deep color */
+    background-color: #ffffcc; /* Light color */
+}
+ 
+/* CSS styles */
+.calendar {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.month {
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-right: 20px;
+}
+
+.header {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.days {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.calendar-day {
+    position: relative;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-left: none;
+    box-sizing: border-box;
+    font-size: 13px;
+    text-align: left;    
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s;
+}
+.calendar-day .day {
+    font-weight: 600;
+    font-size: 20px;
+}
+.calendar-day .shift-hours {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+.calendar-day .calender-top{
+    line-height: 1.5;
+    height: 50px;
+    background: #fff;
+    padding: 5px 10px;
+    box-shadow: 4px 3px 10px -2px #00000073;
+}
+.calendar-day div {
+    height: 100px;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    padding: 5px;
+}
+
+.shift {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+   

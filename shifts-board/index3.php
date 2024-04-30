@@ -24,6 +24,13 @@
         <div class="calender-top calender-box">Clients</div>
       </div>-->
       <div class="calendars-container">
+        <div class="calendar-dates calendar-column ">
+            <div class="calendar-job-title calendar-job-box">
+              <div class="calender-box">
+                <span class="day">Kitchen Potter</span>
+              </div>
+            </div>
+        </div>
         <!-- Calendars will be populated dynamically using JavaScript -->
       </div>
     </section>
@@ -33,9 +40,10 @@
 <script>
 // Array of job titles
 let jobTitles = ["Kitchen Potter", "Care Assistat", "Nurse", "Chef", "Warehouse Assistant"];
-let totalJobs = jobTitles.length+0;
+let totalJobs = jobTitles.length;
 
 const calendarsContainer = document.querySelector(".calendars-container");
+const calendarDatesContainer = document.querySelector(".calendar-dates");
 
 const calenderDiv = document.createElement('div');
 calenderDiv.classList.add('calendar');
@@ -60,69 +68,93 @@ const toDate = new Date('2024-01-12');   // Assuming format: YYYY-MM-DD
     }
 
 
-// Function to populate days in the calendar
-function populateCalendars() {
-  
-  const screenWidth = window.innerWidth;
+const screenWidth = window.innerWidth;
+const containerWidth = calendarsContainer.getBoundingClientRect().width; // Get the width of the container
+const dayWidth7 = Math.floor(containerWidth / 7) - 2; // Calculate the width of each day dynamically
 
-  const containerWidth = calendarsContainer.getBoundingClientRect().width; // Get the width of the container
-  const dayWidth7 = Math.floor(containerWidth / 7) - 2; // Calculate the width of each day dynamically
+
+//add calendar dates
+let currentDate = new Date(fromDate);
+function populateCalendarDates(){
+  
+  while (currentDate <= toDate) {
+      var dateInfo = getDateInfo(currentDate);
+
+      const dayOfWeek = dateInfo[0];
+      const dayOfMonth = dateInfo[1];
+      const month = dateInfo[2];
+      const year = dateInfo[3];
+      const isoWeek = dateInfo[4];
+
+      const dayElement = document.createElement('div');
+      dayElement.classList.add('calendar-job-box');
+      dayElement.innerHTML = `
+          <div class="calender-box">
+              <span class="day">${dayOfMonth}</span><br>
+              ${dayOfWeek}
+              <span class="shift-hours">0 Hrs</span>
+          </div>
+      `;
+
+      dayElement.style.width = dayWidth7 + 'px';
+      calendarDatesContainer.appendChild(dayElement);
+
+      currentDate.setDate(currentDate.getDate() + 1); // Increment the date by 1 day
+  }
+}
+
+// Function to populate records in the calendar
+function populateCalendarRecords() {
 
   let i = 0;
   // Loop through each job title
   while (i < totalJobs) {
     title = jobTitles[i];
     const jobElement = document.createElement('div');
-    jobElement.classList.add('job-calendar-container');
+    jobElement.classList.add('calendar-column');
 
     const dayElement = document.createElement('div');
     dayElement.classList.add('calendar-job-title');
     dayElement.classList.add('calendar-job-box');
-    dayElement.innerHTML = `
-        <div class="calender-box">
-            <span class="day">${title}</span>
-        </div>
-    `;
+    if(i>=totalJobs){
+      dayElement.innerHTML = ``;
+    }else{
+      dayElement.innerHTML = `
+          <div class="calender-box">
+              <span class="day">${title}</span>
+          </div>
+      `;
+    }
+   
     jobElement.appendChild(dayElement);
 
     // Loop through each date from 'fromDate' to 'toDate'
-    const currentDate = new Date(fromDate);
+    let currentDate = new Date(fromDate);
     while (currentDate <= toDate) {
+      var dateInfo = getDateInfo(currentDate);
 
-        const date = new Date(currentDate);
+      const dayOfWeek = dateInfo[0];
+      const dayOfMonth = dateInfo[1];
+      const month = dateInfo[2];
+      const year = dateInfo[3];
+      const isoWeek = dateInfo[4];
 
-        // Extract individual date components
-        const dayOfWeek = date.getDay(); // Get the day of the week (0-6, where 0 represents Sunday)
-        const dayOfMonth = date.getDate(); // Get the day of the month (1-31)
-        const month = date.getMonth(); // Get the month (0-11)
-        const year = date.getFullYear(); // Get the full year (e.g., 2023)
+      const dayElement = document.createElement('div');
+      dayElement.classList.add('calendar-job-box');
+      dayElement.innerHTML = `
+          <div class="calender-box">
+              <span class="day">${dayOfMonth}</span><br>
+              ${dayOfWeek}
+              <span class="shift-hours">0 Hrs</span>
+          </div>
+      `;
 
-        // Calculate ISO week of the year
-        const isoWeek = getISOWeek(date); // Custom function to get ISO week of the year
+      dayElement.style.width = dayWidth7 + 'px';
+      jobElement.appendChild(dayElement);
 
-        // Define an array to map day of the week index to its name
-        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-        // Create an array containing the extracted date components
-        const dateInfo = [daysOfWeek[dayOfWeek], dayOfMonth, month, year, isoWeek];
-
-        const dayElement = document.createElement('div');
-    dayElement.classList.add('calendar-job-box');
-        dayElement.innerHTML = `
-        <div class="calender-top calender-box ">
-                            <span class="day">${dayOfMonth}</span><br>
-                            ${daysOfWeek[dayOfWeek]}
-                            <span class="shift-hours">0 Hrs</span>
-                        </div>
-        `;
-
-
-        dayElement.style.width = dayWidth7 + 'px';
-        jobElement.appendChild(dayElement);
-        
-
-        currentDate.setDate(currentDate.getDate() + 1); // Increment the date by 1 day
+      currentDate.setDate(currentDate.getDate() + 1); // Increment the date by 1 day
     }
+
 
     
     calendarsContainer.appendChild(jobElement);
@@ -152,9 +184,32 @@ function populateSide() {
 
 // Call the functions when the page loads
 window.addEventListener('load', function() {
-    populateCalendars();
+    populateCalendarDates();
+    //populateCalendarRecords();
     //populateSide();
 });
+
+
+function getDateInfo(currentDate) {
+    const date = new Date(currentDate);
+
+    // Extract individual date components
+    const dayOfWeek = date.getDay(); // Get the day of the week (0-6, where 0 represents Sunday)
+    const dayOfMonth = date.getDate(); // Get the day of the month (1-31)
+    const month = date.getMonth(); // Get the month (0-11)
+    const year = date.getFullYear(); // Get the full year (e.g., 2023)
+
+    // Calculate ISO week of the year
+    const isoWeek = getISOWeek(date); // Custom function to get ISO week of the year
+
+    // Define an array to map day of the week index to its name
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    // Create an array containing the extracted date components
+    const dateInfo = [daysOfWeek[dayOfWeek], dayOfMonth, month, year, isoWeek];
+
+    return dateInfo;
+}
 
 
 

@@ -24,12 +24,14 @@
         <div class="calender-top calender-box">Clients</div>
       </div>-->
       <div class="calendars-container">
-        <div class="calendar-dates calendar-column ">
-            <div class="calendar-job-title calendar-job-box">
+        <div class="calendar-heads calendar-column ">
+
+            <div class="calendar-job-title">
               <div class="calender-box">
-                <span class="day">Kitchen Potter</span>
+                <span class="day">Jobs</span>
               </div>
             </div>
+            <div class="calendar-grids-container"></div>
         </div>
         <!-- Calendars will be populated dynamically using JavaScript -->
       </div>
@@ -43,7 +45,7 @@ let jobTitles = ["Kitchen Potter", "Care Assistat", "Nurse", "Chef", "Warehouse 
 let totalJobs = jobTitles.length;
 
 const calendarsContainer = document.querySelector(".calendars-container");
-const calendarDatesContainer = document.querySelector(".calendar-dates");
+const calendarGridsContainer = document.querySelector(".calendar-heads .calendar-grids-container");
 
 const calenderDiv = document.createElement('div');
 calenderDiv.classList.add('calendar');
@@ -87,7 +89,7 @@ function populateCalendarDates(){
       const isoWeek = dateInfo[4];
 
       const dayElement = document.createElement('div');
-      dayElement.classList.add('calendar-job-box');
+      dayElement.classList.add('calendar-cell');
       dayElement.innerHTML = `
           <div class="calender-box">
               <span class="day">${dayOfMonth}</span><br>
@@ -97,7 +99,7 @@ function populateCalendarDates(){
       `;
 
       dayElement.style.width = dayWidth7 + 'px';
-      calendarDatesContainer.appendChild(dayElement);
+      calendarGridsContainer.appendChild(dayElement);
 
       currentDate.setDate(currentDate.getDate() + 1); // Increment the date by 1 day
   }
@@ -108,14 +110,13 @@ function populateCalendarRecords() {
 
   let i = 0;
   // Loop through each job title
-  while (i < totalJobs) {
+  while (i < totalJobs+6) {
     title = jobTitles[i];
     const jobElement = document.createElement('div');
     jobElement.classList.add('calendar-column');
 
     const dayElement = document.createElement('div');
     dayElement.classList.add('calendar-job-title');
-    dayElement.classList.add('calendar-job-box');
     if(i>=totalJobs){
       dayElement.innerHTML = ``;
     }else{
@@ -140,12 +141,10 @@ function populateCalendarRecords() {
       const isoWeek = dateInfo[4];
 
       const dayElement = document.createElement('div');
-      dayElement.classList.add('calendar-job-box');
+      dayElement.classList.add('calendar-cell');
       dayElement.innerHTML = `
-          <div class="calender-box">
-              <span class="day">${dayOfMonth}</span><br>
-              ${dayOfWeek}
-              <span class="shift-hours">0 Hrs</span>
+          <div class="calender-box" data-dayofmonth="${dayOfMonth}"  data-dayofweek="${dayOfWeek}">
+              
           </div>
       `;
 
@@ -185,7 +184,7 @@ function populateSide() {
 // Call the functions when the page loads
 window.addEventListener('load', function() {
     populateCalendarDates();
-    //populateCalendarRecords();
+    populateCalendarRecords();
     //populateSide();
 });
 
@@ -228,7 +227,7 @@ function getISOWeek(date) {
       const containerWidth = calendarsContainer.getBoundingClientRect().width; // Get the width of the container
       const dayWidth30 = Math.floor(containerWidth / 30) - 2; // Calculate the width of each day dynamically
 
-      const dayElements = document.querySelectorAll('.calendar-day');
+      const dayElements = document.querySelectorAll('.calendar-cell');
       dayElements.forEach(dayElement => {
         dayElement.style.width = dayWidth30 + 'px';
       });
@@ -238,9 +237,9 @@ function getISOWeek(date) {
     function showCalendarByWeek() {
       const calendarsContainer = document.querySelector('.calendars-container');
       const containerWidth = calendarsContainer.getBoundingClientRect().width; // Get the width of the container
-      const dayWidth7 = Math.floor(containerWidth / 7) - 2; // Calculate the width of each day dynamically
+      const dayWidth7 = Math.floor(containerWidth / 7.5) - 2; // Calculate the width of each day dynamically
 
-      const dayElements = document.querySelectorAll('.calendar-day');
+      const dayElements = document.querySelectorAll('.calendar-cell');
       dayElements.forEach(dayElement => {
         dayElement.style.width = dayWidth7 + 'px';
       });

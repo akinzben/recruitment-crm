@@ -5,35 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Job Shifts Board</title>
   <link rel="stylesheet" href="../css/main.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
   <style>
     
   </style>
 </head>
 <body>
+    <button id="showCalendarByWeek">Week</button>
+    <button id="showCalendarByMonth">Month</button>
 
-  <div class="main-container">
-    <section class="container-top">
-      <button id="showCalendarByWeek">Week</button>
-      <button id="showCalendarByMonth">Month</button>
-    </section>
+  
 
-    <section class="records-container">
-      <div class="calendar-side-container">
-        <div class="calender-top calender-box">Clients</div>
-      </div>
-      <div class="calendars-container">
-        <!-- Calendars will be populated dynamically using JavaScript -->
-      </div>
-    </section>
-  </div>  
+  <section class="records-container">
+    <div class="calendar-side-container">
+      <div class="calender-top">Clients</div>
+    </div>
+    <div class="calendars-container">
+      <!-- Calendars will be populated dynamically using JavaScript -->
+    </div>
+  </section>
+  
 
 
 <script>
 // Array of job titles
 let jobTitles = ["Kitchen Potter", "Care Assistat", "Nurse", "Chef", "Warehouse Assistant"];
-let totalJobs = jobTitles.length+5;
+let totalJobs = jobTitles.length;
 
 const calendarsContainer = document.querySelector(".calendars-container");
 
@@ -116,7 +112,7 @@ function populateCalendars() {
     const dayElement = document.createElement('div');
     dayElement.classList.add('calendar-day');
     dayElement.innerHTML = `
-      <div class="calender-top calender-box ">
+      <div class="calender-top">
                         <span class="day">${dayOfMonth}</span><br>
                         ${daysOfWeek[dayOfWeek]}
                         <span class="shift-hours">0 Hrs</span>
@@ -137,6 +133,82 @@ function populateCalendars() {
     currentDate.setDate(currentDate.getDate() + 1); // Increment the date by 1 day
   }
 
+    for(i=1;i<=0;i++){
+
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth() + 1;
+        const currentDay = currentDate.getDate();
+        const screenWidth = window.innerWidth;
+
+        // Calculate the width of each day dynamically
+        const dayWidth = Math.floor(screenWidth / 7) - 2; // Subtracting 2px for borders
+
+        // Loop through each month from January to December
+        for (let month = 1; month <= 12; month++) {
+            const daysInMonth = getDaysInMonth(month, 2024);
+
+            // Create container for each month
+            const monthContainer = document.createElement('div');
+            monthContainer.classList.add('month');
+
+            // Give the first calendar a unique ID
+            if (month === 1) {
+            monthContainer.id = 'uniqueCalendar';
+            }
+
+            // Create header for each month
+            const monthHeader = document.createElement('div');
+            monthHeader.classList.add('header');
+            monthHeader.textContent = new Date(2024, month - 1, 1).toLocaleString('default', { month: 'long' });
+            //monthContainer.appendChild(monthHeader);
+
+            // Create days container for each month
+            const daysContainer = document.createElement('div');
+            daysContainer.classList.add('days');
+
+            // Create day elements for each month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day');
+                dayElement.innerHTML = `
+                    <div class="calender-top">
+                        <span class="day">${day}</span><br>
+                        ${daysOfWeek[new Date(2024, month - 1, day).getDay()]}
+                        <span class="shift-hours">0 Hrs</span>
+                    </div>`;
+
+                // Add 5 divs with different classes
+                for (let i = 1; i <= totalJobs; i++) {
+                    const innerDiv = document.createElement('div');
+                    innerDiv.classList.add('calendar-box');
+                    dayElement.appendChild(innerDiv);
+                }
+
+                dayElement.style.width = dayWidth + 'px';
+                daysContainer.appendChild(dayElement);
+
+                // If it's the current day, add a class to style it differently
+                if (month === currentMonth && day === currentDay) {
+                    dayElement.classList.add('current-day');
+                }
+            }
+
+
+            monthContainer.appendChild(daysContainer);
+            calenderDiv.appendChild(monthContainer)
+            calendarsContainer.appendChild(calenderDiv);
+
+            // If it's the current month, scroll to the current day
+            if (month === currentMonth) {
+                const currentDayElement = monthContainer.querySelector('.current-day');
+                if (currentDayElement) {
+                    const scrollOffset = currentDayElement.offsetLeft - (calendarsContainer.offsetWidth / 2);
+                    calendarsContainer.scrollLeft = scrollOffset;
+                }
+            }
+        }
+    }
 
 }
 
@@ -163,13 +235,6 @@ window.addEventListener('load', function() {
     populateSide();
 });
 
-
-$(document).ready(function() {
-  $('.records-container').on("scroll", function() {
-    var scrollY = $(this).scrollTop();
-    $(".calender-top").css("top", scrollY);
-  });
-});
 
 function getISOWeek(date) {
     const dayOfWeek = date.getDay() || 7; // Adjust for JavaScript's 0-indexed day of the week where Sunday is 0
